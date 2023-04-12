@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { filter, from, map, Observable, of, Subscription, tap } from 'rxjs';
 import { PlayersService } from './shared/services/players.service';
 import { Player } from './shared/types/player.interface';
+import { PlayersState } from './players.state';
 
 @Injectable()
 export class PlayersSandbox {
-  constructor(private playersService: PlayersService) {}
+  private subscriptions: Subscription[] = [];
+  constructor(
+    private playersService: PlayersService,
+    private playersState: PlayersState
+  ) {}
 
   addPlayer(player: any) {}
 
@@ -13,11 +18,30 @@ export class PlayersSandbox {
 
   removePlayer(player: any) {}
 
-  fetchPlayers(): Observable<any> {
-    return this.playersService.fetchAll();
+  fetchPlayers(): void {
+    this.subscriptions.push(
+      this.playersService
+        .fetchAll()
+        .pipe(tap((data: Player[]) => this.playersState.setPlayers(data)))
+        .subscribe()
+    );
+  }
+
+  getPlayers(): Observable<Player[]> {
+    return this.playersState.getPlayers();
+  }
+
+  getPlayer(id: number): Observable<Player | undefined> {
+    return this.playersState
+      .getPlayers()
+      .pipe(map(playerArray => playerArray.find(player => player.id === id)));
   }
 
   search(): Observable<any> {
     return of(null);
+  }
+
+  unregisterEvents(): void {
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 }

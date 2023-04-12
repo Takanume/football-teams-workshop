@@ -21,11 +21,13 @@ import {
   getDatabase,
   provideDatabase,
 } from '@angular/fire/database';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [AppContainer],
   imports: [
     BrowserModule,
     RouterModule.forRoot(appRoutes),
+    HttpClientModule,
     PlayersModule,
     provideDatabase(() => {
       let db = getDatabase();
