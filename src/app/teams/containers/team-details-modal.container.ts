@@ -6,13 +6,17 @@ import { catchError, of, switchMap } from 'rxjs';
 @Component({
   selector: 'app-team-details',
   template: `
-    <app-custom-modal>
+    <app-custom-modal *ngIf="team$ | async as team">
       <div class="modal-header" header>
-        <h5 class="modal-title">Modal Title</h5>
-        <button type="button" class="btn-close" (click)="closeModal()"></button>
+        <h5 class="modal-title">{{ team.name }}</h5>
+        <a class="btn-close" routerLink="/teams"></a>
       </div>
-      <div class="modal-body" body>body</div>
-      <div class="modal-footer" footer>footer</div>
+      <div class="modal-body" body>
+        Team color: <strong>{{ team.color }}</strong>
+      </div>
+      <div class="modal-footer" footer>
+        <a class="btn btn-secondary" routerLink="/teams"> Back </a>
+      </div>
     </app-custom-modal>
   `,
 })
@@ -31,8 +35,4 @@ export class TeamDetailsModalContainer {
     private router: Router,
     private route: ActivatedRoute
   ) {}
-
-  closeModal() {
-    void this.router.navigate(['/teams']);
-  }
 }
