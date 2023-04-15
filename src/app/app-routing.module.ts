@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { TeamsPageContainer } from './teams/containers/teams-page.container';
 import { TeamDetailsModalContainer } from './teams/containers/team-details-modal.container';
 import { PageNotFoundComponent } from './core/components/page-not-found.component';
-import { TeamEditFormComponent } from './teams/components/team-edit-form.component';
+import { TeamEditFormContainer } from './teams/containers/team-edit-form.container';
 
 const routes: Routes = [
   { path: '', redirectTo: '/teams', pathMatch: 'full' },
@@ -13,11 +13,11 @@ const routes: Routes = [
     children: [
       {
         path: 'new',
-        component: TeamEditFormComponent,
+        component: TeamEditFormContainer,
       },
       {
         path: ':teamId/edit',
-        component: TeamEditFormComponent,
+        component: TeamEditFormContainer,
       },
       {
         path: ':teamId',

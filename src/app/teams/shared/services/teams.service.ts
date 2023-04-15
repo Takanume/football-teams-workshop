@@ -14,4 +14,8 @@ export class TeamsService {
   fetchAll(): Observable<Team[]> {
     return this.httpClient.get<Team[]>(this.api);
   }
+
+  add(team: Team): Observable<Team> {
+    return this.httpClient.post<Team>(this.api, team);
+  }
 }

@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TeamsSandbox } from '../teams.sandbox';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { Team } from '../shared/types/team';
 
 @Component({
   selector: 'app-teams-page',
@@ -36,15 +38,11 @@ import { ActivatedRoute, Router } from '@angular/router';
     </div>
   `,
 })
-export class TeamsPageContainer {
-  teams$ = this.sb.fetchTeams();
-  constructor(
-    private sb: TeamsSandbox,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+export class TeamsPageContainer implements OnInit {
+  teams$: Observable<Team[]> = this.sb.teams$;
+  constructor(private sb: TeamsSandbox) {}
 
-  addNewTeam() {
-    void this.router.navigate(['new'], { relativeTo: this.route });
+  ngOnInit() {
+    this.sb.fetchTeams();
   }
 }

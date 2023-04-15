@@ -5,9 +5,10 @@ import { TeamsSandbox } from './teams.sandbox';
 import { TeamsService } from './shared/services/teams.service';
 import { TeamDetailsModalContainer } from './containers/team-details-modal.container';
 import { RouterModule } from '@angular/router';
-import { TeamEditFormComponent } from './components/team-edit-form.component';
+import { TeamEditFormContainer } from './containers/team-edit-form.container';
 import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { TeamsState } from './teams.state';
 
 @NgModule({
   imports: [CommonModule, RouterModule, SharedModule, ReactiveFormsModule],
@@ -15,9 +16,9 @@ import { ReactiveFormsModule } from '@angular/forms';
   declarations: [
     TeamsPageContainer,
     TeamDetailsModalContainer,
-    TeamEditFormComponent,
+    TeamEditFormContainer,
   ],
-  providers: [TeamsSandbox, TeamsService],
+  providers: [TeamsSandbox, TeamsService, TeamsState],
 })
 export class TeamsModule {
   constructor() {

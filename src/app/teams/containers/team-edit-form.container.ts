@@ -1,5 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { TeamsSandbox } from '../teams.sandbox';
+import { Observable, Subject, takeUntil, tap } from 'rxjs';
+import { Country } from '../../shared/types/country';
+import { Team } from '../shared/types/team';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-team-details-form',
@@ -7,7 +12,6 @@ import { FormBuilder, Validators } from '@angular/forms';
     <div class="d-flex justify-content-between">
       <h4 class="mb-3">Adding a new team</h4>
     </div>
-
     <form
       class="needs-validation"
       novalidate=""
@@ -24,7 +28,7 @@ import { FormBuilder, Validators } from '@angular/forms';
             required />
           <div
             class="invalid-feedback"
-            *ngIf="country?.hasError('required') && country?.touched">
+            *ngIf="name?.hasError('required') && name?.touched">
             Name is required
           </div>
         </div>
@@ -49,10 +53,12 @@ import { FormBuilder, Validators } from '@angular/forms';
             formControlName="country"
             class="form-control"
             required>
-            <option value="">Select Country</option>
-            <option value="USA">USA</option>
-            <option value="Canada">Canada</option>
-            <option value="Mexico">Mexico</option>
+            <ng-container *ngIf="countries$ | async as countries">
+              <option value="">Select Country</option>
+              <option *ngFor="let country of countries" [value]="country.id">
+                {{ country.name }}
+              </option>
+            </ng-container>
           </select>
           <div
             class="invalid-feedback"
@@ -60,47 +66,37 @@ import { FormBuilder, Validators } from '@angular/forms';
             Country is required
           </div>
         </div>
-        <!--<div class="col-md-5">
-          <label for="country" class="form-label">Country</label>
-          <select class="form-select" id="country" required="">
-            <option value="">Choose...</option>
-            <option>United States</option>
-          </select>
-          <div class="invalid-feedback">Please select a valid country.</div>
-        </div>
-
-        <div class="col-md-4">
-          <label for="state" class="form-label">State</label>
-          <select class="form-select" id="state" required="">
-            <option value="">Choose...</option>
-            <option>California</option>
-          </select>
-          <div class="invalid-feedback">Please provide a valid state.</div>
-        </div>
-
-        <div class="col-md-3">
-          <label for="zip" class="form-label">Zip</label>
-          <input
-            type="text"
-            class="form-control"
-            id="zip"
-            placeholder=""
-            required="" />
-          <div class="invalid-feedback">Zip code required.</div>
-        </div>-->
         <hr class="my-4" />
         <button class="w-100 btn btn-primary btn-lg" type="submit">Save</button>
       </div>
     </form>
   `,
+  styles: [
+    `
+      .invalid-feedback {
+        display: block;
+        width: 100%;
+        margin-top: 0.25rem;
+        font-size: 0.875em;
+        color: #dc3545;
+      }
+    `,
+  ],
 })
-export class TeamEditFormComponent {
-  teamForm = this.fb.nonNullable.group({
+export class TeamEditFormContainer implements OnDestroy {
+  // TODO: EXPLAIN THIS AND ADD OTHER VARIATION
+  private events$ = new Subject();
+
+  teamForm = this.fb.group({
     name: ['', Validators.required],
     color: ['', Validators.required],
     country: ['', Validators.required],
   });
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private sb: TeamsSandbox,
+    private fb: FormBuilder,
+    private router: Router
+  ) {}
 
   get name() {
     return this.teamForm.get('name');
@@ -114,5 +110,22 @@ export class TeamEditFormComponent {
     return this.teamForm.get('country');
   }
 
-  onSubmit() {}
+  get countries$(): Observable<Country[]> {
+    return this.sb.fetchCountries();
+  }
+
+  onSubmit() {
+    this.sb
+      .addTeam(this.teamForm.value as Team)
+      .pipe(
+        tap(team => this.router.navigate(['/teams', team.id])),
+        takeUntil(this.events$)
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy() {
+    this.events$.next(null);
+    this.events$.complete();
+  }
 }
