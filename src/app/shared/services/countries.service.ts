@@ -6,8 +6,12 @@ import { Country } from '../types/country';
 @Injectable()
 export class CountriesService {
   private readonly api = 'http://localhost:3000/countries';
+  countriesCache: Country[] = [];
 
   countries$: Observable<Country[]> = inject(HttpClient)
     .get<Country[]>(this.api)
-    .pipe(shareReplay(1));
+    .pipe(
+      tap(countries => (this.countriesCache = countries)),
+      shareReplay(1)
+    );
 }

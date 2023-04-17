@@ -1,10 +1,19 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { TeamsSandbox } from '../teams.sandbox';
-import { Observable, Subject, takeUntil, tap } from 'rxjs';
+import {
+  catchError,
+  filter,
+  Observable,
+  of,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { Country } from '../../shared/types/country';
 import { Team } from '../shared/types/team';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-team-details-form',
@@ -67,7 +76,17 @@ import { Router } from '@angular/router';
           </div>
         </div>
         <hr class="my-4" />
-        <button class="w-100 btn btn-primary btn-lg" type="submit">Save</button>
+        <button
+          *ngIf="team$ | async as team; else showSave"
+          class="w-100 btn btn-warning btn-lg"
+          type="submit">
+          Edit
+        </button>
+        <ng-template #showSave>
+          <button class="w-100 btn btn-success btn-lg" type="submit">
+            Save
+          </button>
+        </ng-template>
       </div>
     </form>
   `,
@@ -86,16 +105,38 @@ import { Router } from '@angular/router';
 export class TeamEditFormContainer implements OnDestroy {
   // TODO: EXPLAIN THIS AND ADD OTHER VARIATION
   private events$ = new Subject();
+  private teamId: string | undefined;
 
   teamForm = this.fb.group({
     name: ['', Validators.required],
     color: ['', Validators.required],
     country: ['', Validators.required],
   });
+
+  team$ = this.route.paramMap.pipe(
+    filter(paramMao => !!paramMao.get('teamId')),
+    switchMap(paramMap => this.sb.fetchTeam(paramMap.get('teamId'))),
+    tap(team => (this.teamId = team.id)),
+    tap((team: Team) =>
+      this.teamForm.patchValue({
+        name: team.name,
+        color: team.color,
+        country: team.country,
+      })
+    ),
+    catchError(err => {
+      if (err.status) {
+        void this.router.navigate(['/not-found']);
+      }
+      return of(null);
+    })
+  );
+
   constructor(
     private sb: TeamsSandbox,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   get name() {
@@ -116,7 +157,7 @@ export class TeamEditFormContainer implements OnDestroy {
 
   onSubmit() {
     this.sb
-      .addTeam(this.teamForm.value as Team)
+      .saveTeam({ ...this.teamForm.value, id: this.teamId } as Team)
       .pipe(
         tap(team => this.router.navigate(['/teams', team.id])),
         takeUntil(this.events$)

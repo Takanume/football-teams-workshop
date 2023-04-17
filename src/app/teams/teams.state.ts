@@ -9,4 +9,13 @@ export class TeamsState {
   setTeams(teams: Team[]): void {
     this.teams.next(teams);
   }
+
+  private selectedTeam: BehaviorSubject<string> = new BehaviorSubject<string>(
+    'no_team_selected'
+  );
+  selectedTeam$ = this.selectedTeam.asObservable();
+
+  setSelectedTeam(teamId: string): void {
+    this.selectedTeam.next(teamId);
+  }
 }

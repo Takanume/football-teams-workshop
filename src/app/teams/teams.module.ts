@@ -9,6 +9,7 @@ import { TeamEditFormContainer } from './containers/team-edit-form.container';
 import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TeamsState } from './teams.state';
+import { TeamsListComponent } from './components/teams-list.component';
 
 @NgModule({
   imports: [CommonModule, RouterModule, SharedModule, ReactiveFormsModule],
@@ -17,6 +18,7 @@ import { TeamsState } from './teams.state';
     TeamsPageContainer,
     TeamDetailsModalContainer,
     TeamEditFormContainer,
+    TeamsListComponent,
   ],
   providers: [TeamsSandbox, TeamsService, TeamsState],
 })

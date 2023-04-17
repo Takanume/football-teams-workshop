@@ -9,6 +9,7 @@ import { TeamsState } from './teams.state';
 @Injectable()
 export class TeamsSandbox {
   teams$ = this.teamsState.teams$;
+  selectedTeam$ = this.teamsState.selectedTeam$;
 
   constructor(
     private teamsState: TeamsState,
@@ -16,7 +17,14 @@ export class TeamsSandbox {
     private countriesService: CountriesService
   ) {}
 
-  addTeam(team: Team): Observable<Team> {
+  saveTeam(team: Team): Observable<Team> {
+    if (team.id) {
+      return (
+        this.editTeam(team)
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          .pipe(tap(_ => this.fetchTeams()))
+      );
+    }
     return (
       this.teamsService
         .add(team)
@@ -24,6 +32,23 @@ export class TeamsSandbox {
         .pipe(tap(_ => this.fetchTeams()))
     );
   }
+
+  editTeam(team: Team): Observable<Team> {
+    return (
+      this.teamsService
+        .edit(team)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .pipe(tap(_ => this.fetchTeams()))
+    );
+  }
+
+  removeTeam(teamId: string): void {
+    this.teamsService
+      .remove(teamId)
+      .pipe(tap(() => this.fetchTeams()))
+      .subscribe();
+  }
+
   fetchCountries(): Observable<Country[]> {
     return this.countriesService.countries$;
   }
@@ -35,5 +60,9 @@ export class TeamsSandbox {
       .fetchAll()
       .pipe(tap((teams: Team[]) => this.teamsState.setTeams(teams)))
       .subscribe();
+  }
+
+  setSelectedTeam(teamId: string): void {
+    this.teamsState.setSelectedTeam(teamId);
   }
 }
