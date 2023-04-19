@@ -11,7 +11,7 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import { Country } from '../../shared/types/country';
+import { Country } from '../../../shared/types/country';
 import { Team } from '../shared/types/team';
 import { ActivatedRoute, Router } from '@angular/router';
 

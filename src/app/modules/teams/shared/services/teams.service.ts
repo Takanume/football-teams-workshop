@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, switchMap } from 'rxjs';
 import { Team } from '../types/team';
-import { Country } from '../../../shared/types/country';
+import { Country } from '../../../../shared/types/country';
 
 @Injectable()
 export class TeamsService {

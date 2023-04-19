@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { TeamsService } from './shared/services/teams.service';
 import { Observable, tap } from 'rxjs';
 import { Team } from './shared/types/team';
-import { CountriesService } from '../shared/services/countries.service';
-import { Country } from '../shared/types/country';
+import { CountriesService } from '../../shared/services/countries.service';
+import { Country } from '../../shared/types/country';
 import { TeamsState } from './teams.state';
 
 @Injectable()

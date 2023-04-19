@@ -12,7 +12,9 @@ import { Component } from '@angular/core';
           <li>
             <a routerLink="teams" class="nav-link px-2 text-white">Teams</a>
           </li>
-          <li><a href="#" class="nav-link px-2 text-white">Players</a></li>
+          <li>
+            <a routerLink="players" class="nav-link px-2 text-white">Players</a>
+          </li>
           <li><a href="#" class="nav-link px-2 text-white">About</a></li>
         </ul>
 
