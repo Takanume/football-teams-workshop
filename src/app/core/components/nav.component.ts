@@ -15,7 +15,11 @@ import { Component } from '@angular/core';
           <li>
             <a routerLink="players" class="nav-link px-2 text-white">Players</a>
           </li>
-          <li><a href="#" class="nav-link px-2 text-white">About</a></li>
+          <li>
+            <a routerLink="favPlayers" class="nav-link px-2 text-white"
+              >My players</a
+            >
+          </li>
         </ul>
 
         <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">

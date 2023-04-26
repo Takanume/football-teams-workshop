@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PlayersSandbox } from '../players.sandbox';
 import { Router } from '@angular/router';
+import { Player } from '../shared/types/player';
 
 @Component({
   selector: 'app-players-page',
@@ -16,6 +17,7 @@ import { Router } from '@angular/router';
       </div>
       <div class="row mt-5">
         <app-players-list
+          (addToFavorite)="onAddToFavorite($event)"
           (edit)="onEdit($event)"
           (remove)="onRemove($event)"
           [players]="players$ | async" />
@@ -29,6 +31,10 @@ export class PlayersPageContainer implements OnInit {
 
   ngOnInit() {
     this.sb.fetchPlayers();
+  }
+
+  onAddToFavorite(player: Player) {
+    this.sb.addPlayerToFavorite(player);
   }
 
   onRemove(playerId: number) {

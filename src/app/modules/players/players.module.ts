@@ -1,32 +1,32 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
 import { PlayersPageContainer } from './containers/players-page.container';
-import { PlayersDetailsContainer } from './containers/players-details.container';
+import { PlayersDetailsModalContainer } from './containers/players-details-modal.container';
 import { AddPlayerPageContainer } from './containers/add-player-page.container';
 import { EditPlayerPageContainer } from './containers/edit-player-page.container';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { PlayersListComponent } from './components/players-list.component';
-import { StoreModule } from '@ngrx/store';
-import { playersKey, reducers } from './shared/state/players.selctors';
 import { CommonModule } from '@angular/common';
 import { PlayersSandbox } from './players.sandbox';
 import { PlayersService } from './shared/services/players.service';
-import { PlayersEditFormComponent } from './components/players-edit-form.component';
+import { PlayerEditFormComponent } from './components/player-edit-form.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
     RouterLink,
-    StoreModule.forFeature(playersKey, reducers),
+    RouterOutlet,
+    ReactiveFormsModule,
   ],
   declarations: [
     PlayersPageContainer,
-    PlayersDetailsContainer,
+    PlayersDetailsModalContainer,
     AddPlayerPageContainer,
     EditPlayerPageContainer,
     PlayersListComponent,
-    PlayersEditFormComponent,
+    PlayerEditFormComponent,
   ],
   providers: [PlayersSandbox, PlayersService],
 })

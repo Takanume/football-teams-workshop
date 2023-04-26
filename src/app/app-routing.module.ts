@@ -5,12 +5,18 @@ import { TeamDetailsModalContainer } from './modules/teams/containers/team-detai
 import { PageNotFoundComponent } from './core/components/page-not-found.component';
 import { TeamEditFormContainer } from './modules/teams/containers/team-edit-form.container';
 import { PlayersPageContainer } from './modules/players/containers/players-page.container';
-import { PlayersDetailsContainer } from './modules/players/containers/players-details.container';
+import { PlayersDetailsModalContainer } from './modules/players/containers/players-details-modal.container';
 import { EditPlayerPageContainer } from './modules/players/containers/edit-player-page.container';
 import { AddPlayerPageContainer } from './modules/players/containers/add-player-page.container';
+import { HomeContainer } from './modules/home/containers/home.container';
 
 const routes: Routes = [
   { path: '', redirectTo: '/teams', pathMatch: 'full' },
+  { path: 'favPlayers', redirectTo: 'home' },
+  {
+    path: 'home',
+    component: HomeContainer,
+  },
   {
     path: 'players/new',
     component: AddPlayerPageContainer,
@@ -21,7 +27,7 @@ const routes: Routes = [
   },
   {
     path: 'players/:playerId',
-    component: PlayersDetailsContainer,
+    component: PlayersDetailsModalContainer,
   },
   {
     path: 'players',

@@ -11,30 +11,30 @@ export class TeamsService {
 
   fetchTeam(id: string | null): Observable<Team> {
     return this.httpClient
-      .get<Team>(`${this.api}/teams/${id}`)
+      .get<Team>(`${this.api}/team/${id}`)
       .pipe(switchMap(team => this.mapCountryName(team)));
   }
   fetchAll(): Observable<Team[]> {
-    return this.httpClient.get<Team[]>(`${this.api}/teams`);
+    return this.httpClient.get<Team[]>(`${this.api}/team`);
   }
 
   add(team: Team): Observable<Team> {
-    return this.httpClient.post<Team>(`${this.api}/teams`, team);
+    return this.httpClient.post<Team>(`${this.api}/team`, team);
   }
 
   edit(team: Team): Observable<Team> {
-    return this.httpClient.put<Team>(`${this.api}/teams/${team.id}`, team);
+    return this.httpClient.put<Team>(`${this.api}/team/${team.id}`, team);
   }
 
   private mapCountryName(team: Team): Observable<Team> {
     return this.httpClient
-      .get<Country>(`${this.api}/countries/${team.country}`)
+      .get<Country>(`${this.api}/country/${team.country}`)
       .pipe(
         map(country => ({ ...team, countryName: country.name } as Team)) // Map the country name
       );
   }
 
   remove(id: string): Observable<Team> {
-    return this.httpClient.delete<Team>(`${this.api}/teams/${id}`);
+    return this.httpClient.delete<Team>(`${this.api}/team/${id}`);
   }
 }

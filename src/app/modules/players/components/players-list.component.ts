@@ -11,18 +11,24 @@ import { Player } from '../shared/types/player';
           <th scope="col">Name</th>
           <th scope="col">Age</th>
           <th scope="col">Position</th>
-          <th scope="col">Team</th>
           <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let player of players; let i = index">
-          <th scope="row">{{ i + 1 }}</th>
+          <th scope="row">
+            <a [routerLink]="player.id.toString()">
+              {{ i + 1 }}
+            </a>
+          </th>
           <td>{{ player.name }}</td>
           <td>{{ player.age }}</td>
           <td>{{ player.pos }}</td>
-          <td>{{ player.teamName }}</td>
           <td>
+            <button
+              (click)="onAddToFavorite(player)"
+              class="btn btn-outline-primary bi bi-star-fill"
+              style="margin-right: 5px;"></button>
             <button
               class="btn btn-warning bi bi-pencil"
               style="margin-right: 5px;"
@@ -39,9 +45,13 @@ import { Player } from '../shared/types/player';
 export class PlayersListComponent {
   @Input() players: Player[] | null = [];
 
+  @Output() addToFavorite = new EventEmitter<Player>();
   @Output() edit = new EventEmitter<number>();
   @Output() remove = new EventEmitter<number>();
 
+  onAddToFavorite(player: Player) {
+    this.addToFavorite.emit(player);
+  }
   onEdit(id: number) {
     this.edit.emit(id);
   }

@@ -2,23 +2,32 @@ import { createAction, props } from '@ngrx/store';
 import { Player } from '../types/player';
 import { EntityMap, EntityMapOne, Predicate, Update } from '@ngrx/entity';
 
+export const enum PlayersActionTypes {
+  SET_PLAYERS = '[Players] Set Players',
+  SET_PLAYER = '[Players] Set Player',
+  ADD_PLAYER = '[Players] Add Player',
+  UPDATE_PLAYER = '[Players] Update Player',
+}
+
 export const setPlayers = createAction(
-  '[Players] Set Players',
+  PlayersActionTypes.SET_PLAYERS,
   props<{ players: Player[] }>()
 );
 
+export const setPlayer = createAction(
+  PlayersActionTypes.SET_PLAYER,
+  props<{ player: Player }>()
+);
+
+export const addPlayer = createAction(
+  PlayersActionTypes.ADD_PLAYER,
+  props<{ player: Player }>()
+);
 export const updatePlayer = createAction(
-  '[Players] Update Player',
+  PlayersActionTypes.UPDATE_PLAYER,
   props<{ update: Update<Player> }>()
 );
-export const addPlayer = createAction(
-  '[Players] Add Player',
-  props<{ player: Player }>()
-);
-export const setPlayer = createAction(
-  '[Players] Set Player',
-  props<{ player: Player }>()
-);
+
 export const upsertPlayer = createAction(
   '[Players] Upsert Player',
   props<{ player: Player }>()

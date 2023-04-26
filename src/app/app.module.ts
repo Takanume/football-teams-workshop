@@ -1,4 +1,4 @@
-import { isDevMode, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -7,23 +7,18 @@ import { CoreModule } from './core/core.module';
 import { TeamsModule } from './modules/teams/teams.module';
 import { SharedModule } from './shared/shared.module';
 import { PlayersModule } from './modules/players/players.module';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { StoreModule } from '@ngrx/store';
+import { HomeModule } from './modules/home/home.module';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     CoreModule,
+    AppRoutingModule,
     TeamsModule,
     PlayersModule,
+    HomeModule,
     SharedModule,
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: isDevMode() }),
-    //
-    // Store
-    //
-    StoreModule.forRoot({}),
   ],
   providers: [],
   bootstrap: [AppComponent],

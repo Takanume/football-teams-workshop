@@ -5,7 +5,7 @@ import { Country } from '../types/country';
 
 @Injectable()
 export class CountriesService {
-  private readonly api = 'http://localhost:3000/countries';
+  private readonly api = 'http://localhost:3000/country';
   countriesCache: Country[] = [];
 
   countries$: Observable<Country[]> = inject(HttpClient)

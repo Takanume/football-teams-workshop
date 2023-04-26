@@ -17,6 +17,9 @@ export const playersReducer = createReducer(
   on(playersActions.setPlayers, (state, { players }) =>
     adapter.setAll(players, state)
   ),
+  on(playersActions.upsertPlayer, (state, { player }) =>
+    adapter.upsertOne(player, state)
+  ),
   on(playersActions.deletePlayer, (state, { id }) =>
     adapter.removeOne(id, state)
   )
