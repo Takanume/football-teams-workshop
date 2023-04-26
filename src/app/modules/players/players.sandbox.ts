@@ -33,7 +33,7 @@ export class PlayersSandbox {
   }
 
   removePlayer(playerId: number): void {
-    this.playersService.delete(playerId).pipe(tap(_ => this.fetchPlayers()));
+    this.playersService.delete(playerId).pipe(tap(() => this.fetchPlayers()));
   }
   fetchTeams(): Observable<Team[]> {
     return this.teamsService.fetchAll();
